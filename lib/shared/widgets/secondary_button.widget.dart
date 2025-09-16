@@ -42,10 +42,10 @@ class SecondaryButton extends StatelessWidget {
     var btnStyle = ButtonStyle(
       fixedSize: width == null
           ? null
-          : MaterialStateProperty.all<Size>(
+          : WidgetStateProperty.all<Size>(
               Size.fromWidth(width!),
             ),
-      padding: MaterialStateProperty.all<EdgeInsets>(
+      padding: WidgetStateProperty.all<EdgeInsets>(
         EdgeInsets.only(
           top: dense ? 10 : 20,
           bottom: dense ? 10 : 20,
@@ -64,10 +64,10 @@ class SecondaryButton extends StatelessWidget {
     if (isDisabled) {
       btnStyle = btnStyle.copyWith(
         // foregroundColor: MaterialStateProperty.all<Color>(Colors.grey),
-        backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.shade100),
-        side: MaterialStateProperty.all<BorderSide>(
+        backgroundColor: WidgetStateProperty.all<Color>(Colors.grey.shade100),
+        side: WidgetStateProperty.all<BorderSide>(
             BorderSide(color: Colors.grey.shade100)),
-        overlayColor: MaterialStateProperty.all<Color>(Colors.transparent),
+        overlayColor: WidgetStateProperty.all<Color>(Colors.transparent),
       );
     }
 
