@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:teste_flutter/features/catalog/entities/category.entity.dart';
+import 'package:teste_flutter/features/catalog/entities/item_categoria.entity.dart';
 import 'package:teste_flutter/features/catalog/services/get_catalog_mock.service.dart';
 
 part 'catalog.store.g.dart';

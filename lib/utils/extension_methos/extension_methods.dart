@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -141,14 +143,12 @@ extension StringExtension on String {
 
     return '$year$month$day$hour$minute$second$millisecond';
   }
-
 }
 
 extension NumExtension on num {
   String formatCurrency() {
     return UtilBrasilFields.obterReal(toDouble());
   }
-
 }
 
 extension DoubleExtension on double {
@@ -241,7 +241,7 @@ extension DateTimeExtension on DateTime {
   String formatDateTime({String format = "dd/MM/yyyy 'às' HH:mm"}) {
     return DateFormat(format).format(this);
   }
-  
+
   String formatHumamDiffFromNow({String prefix = 'há '}) {
     final diff = DateTime.now().difference(this);
 

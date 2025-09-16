@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:teste_flutter/features/pos/widgets/desktop/catalog.page.dart';
 import 'package:teste_flutter/shared/widgets/primary_button.widget.dart';
 
 import '../../catalog/stores/catalog.store.dart';
@@ -11,9 +12,12 @@ class PosPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-          "Desenvolver aqui, sinta-se livre para criar novas pastas e arquivos conforme a necessidade."),
-    );
+    return LayoutBuilder(builder: (context, constraints) {
+      if (constraints.maxWidth > 360) {
+        return CatalogPage(
+            categories: catalogStore.categorias, storeName: '[nome loja]');
+      }
+      return const SizedBox();
+    });
   }
 }
