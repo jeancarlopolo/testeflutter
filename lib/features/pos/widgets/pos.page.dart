@@ -14,8 +14,7 @@ class PosPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth > 360) {
-        return CatalogPage(
-            categories: catalogStore.categorias, storeName: '[nome loja]');
+        return const CatalogPage(storeName: '[nome loja]');
       }
       return const SizedBox();
     });

@@ -10,7 +10,7 @@ dependencies:
   brasil_fields: ^1.15.0
   flutter:
     sdk: flutter
-  flutter_mobx: ^2.2.1+1
+  flutter_mobx: ^2.3.0
   flutter_svg: ^2.0.10+1
   get_it: ^7.6.7
   intl: ^0.19.0

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:teste_flutter/features/catalog/entities/item_categoria.entity.dart';
+import 'package:teste_flutter/features/pos/widgets/shared/product_card.widget.dart';
 
 class ProductGrid extends StatelessWidget {
   const ProductGrid({
@@ -14,6 +15,7 @@ class ProductGrid extends StatelessWidget {
     if (items.isEmpty) {
       return const Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.search_off, size: 64, color: Colors.black26),
             SizedBox(height: 8),
@@ -22,17 +24,14 @@ class ProductGrid extends StatelessWidget {
         ),
       );
     }
-    return GridView.builder(
-      shrinkWrap: true,
-      scrollDirection: Axis.vertical,
-      gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 250.0,
-        mainAxisSpacing: 16.0,
-        crossAxisSpacing: 16.0,
-        childAspectRatio: 0.75,
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Wrap(
+        spacing: 16.0, 
+        runSpacing: 16.0, 
+        children: items.map((item) => ItemCard(item: item)).toList(),
       ),
-      
-      itemBuilder: (context, index) {},
     );
   }
 }

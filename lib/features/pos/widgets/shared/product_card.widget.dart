@@ -62,7 +62,8 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final enabled = item.status == StatusEnum.disponivel || item.status ==  StatusEnum.novidade;
+    final enabled = item.status == StatusEnum.disponivel ||
+        item.status == StatusEnum.novidade;
     return Opacity(
       opacity: enabled ? 1.0 : 0.5,
       child: Container(
@@ -110,17 +111,40 @@ class ItemCard extends StatelessWidget {
               },
             ),
           ),
-          if (item.status == StatusEnum.indisponivel) _buildUnavailableTag(),
-
-          // /* Discount */ - Shows discount percentage from the model
-          if (item.statusPromocao && item.porcentagemPromocional > 0)
+          switch (item.status) {
+            StatusEnum.esgotado =>
+              _buildTag('ESGOTADO', Colors.black.withOpacity(0.6)),
+            StatusEnum.indisponivel =>
+              _buildTag('INDISPONÍVEL', Colors.black.withOpacity(0.6)),
+            StatusEnum.novidade => _buildTag('NOVIDADE', Colors.green),
+            _ => const SizedBox.shrink(),
+          },
+          if (item.statusPromocao &&
+              item.precoPromocional < item.preco &&
+              item.precoPromocional > 0)
             _buildDiscountTag(),
+          
+          // START OF CHANGES: Group icons in a Positioned Row
+          Positioned(
+            top: 6,
+            right: 4,
+            child: Row(
+              children: [
+                // Show cashback icon if active
+                if (_hasActiveCashback)
+                  const CashBackIcon(),
+                
+                // Show a spacer ONLY if both icons are visible
+                if (_hasActiveCashback && item.statusPromocao)
+                  const SizedBox(width: 5),
 
-          // /* Cashback */ icon
-          if (_hasActiveCashback) const CashBackIcon(),
-
-          // /* Gift */ icon - Showing if it's a promotion
-          if (item.statusPromocao) const GiftIcon(),
+                // Show gift icon if it's a promotion
+                if (item.statusPromocao)
+                  const GiftIcon(),
+              ],
+            ),
+          ),
+          // END OF CHANGES
 
           // /* Open product */ - The add button
           _buildAddButton(),
@@ -141,12 +165,12 @@ class ItemCard extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(color: lightBorderColor),
         ),
-        child: const Icon(Icons.add, size: 18, color: Colors.black),
+        child: const Icon(Icons.open_in_full, size: 18, color: Colors.black),
       ),
     );
   }
 
-  Widget _buildUnavailableTag() {
+  Widget _buildTag(String text, Color backgroundColor) {
     return Positioned(
       bottom: 0,
       left: 0,
@@ -154,16 +178,16 @@ class ItemCard extends StatelessWidget {
       child: Container(
         height: 20,
         decoration: BoxDecoration(
-          color: Colors.black.withOpacity(0.6),
+          color: backgroundColor,
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(8),
             bottomRight: Radius.circular(8),
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            'INDISPONÍVEL',
-            style: TextStyle(
+            text,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 11,
               fontWeight: FontWeight.bold,
@@ -186,7 +210,7 @@ class ItemCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(6),
         ),
         child: Text(
-          '-${item.porcentagemPromocional}%',
+          '-${((item.preco - item.precoPromocional) / item.preco * 100).toStringAsFixed(0)}%',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 12,
@@ -271,6 +295,7 @@ class ContentSection extends StatelessWidget {
   }
 }
 
+// MODIFIED: Removed the Positioned wrapper
 class CashBackIcon extends StatelessWidget {
   const CashBackIcon({
     super.key,
@@ -278,22 +303,19 @@ class CashBackIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      right: 39,
-      top: 6,
-      child: Container(
-        width: 30,
-        height: 30,
-        decoration: const BoxDecoration(
-          color: Colors.green,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(Icons.monetization_on, color: Colors.white, size: 16),
+    return Container(
+      width: 30,
+      height: 30,
+      decoration: const BoxDecoration(
+        color: Colors.green,
+        shape: BoxShape.circle,
       ),
+      child: const Icon(Icons.monetization_on, color: Colors.white, size: 16),
     );
   }
 }
 
+// MODIFIED: Removed the Positioned wrapper
 class GiftIcon extends StatelessWidget {
   const GiftIcon({
     super.key,
@@ -301,18 +323,14 @@ class GiftIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      right: 4,
-      top: 6,
-      child: Container(
-        width: 30,
-        height: 30,
-        decoration: const BoxDecoration(
-          color: Colors.green,
-          shape: BoxShape.circle,
-        ),
-        child: const Icon(Icons.card_giftcard, color: Colors.white, size: 16),
+    return Container(
+      width: 30,
+      height: 30,
+      decoration: const BoxDecoration(
+        color: Colors.green,
+        shape: BoxShape.circle,
       ),
+      child: const Icon(Icons.card_giftcard, color: Colors.white, size: 16),
     );
   }
 }

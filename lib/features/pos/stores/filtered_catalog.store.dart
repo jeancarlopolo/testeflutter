@@ -1,20 +1,20 @@
-import 'dart:math';
-
 import 'package:mobx/mobx.dart';
 import 'package:teste_flutter/features/catalog/entities/category.entity.dart';
 import 'package:teste_flutter/features/catalog/entities/item_categoria.entity.dart';
 import 'package:teste_flutter/features/catalog/stores/catalog.store.dart';
+import 'package:teste_flutter/utils/extension_methos/extension_methods.dart';
 part 'filtered_catalog.store.g.dart';
 
 class FilteredCatalogStore = FilteredCatalogStoreBase
     with _$FilteredCatalogStore;
 
 abstract class FilteredCatalogStoreBase with Store {
-  FilteredCatalogStoreBase(CatalogStore catalogStore) {
-    _catalogStore = catalogStore;
-  }
+  FilteredCatalogStoreBase(this.catalogStore);
 
-  late CatalogStore _catalogStore;
+  @observable
+  CatalogStore catalogStore;
+
+
 
   @observable
   String searchQuery = '';
@@ -35,17 +35,21 @@ abstract class FilteredCatalogStoreBase with Store {
 
   @computed
   List<Categoria> get filteredCategories {
+    if (catalogStore.categorias.isEmpty) return [];
     return filterCategories(searchQuery);
   }
 
   @computed
   List<ItemCategoria> get filteredItems {
-    return filteredCategories.expand((cat) => cat.itens ?? <ItemCategoria>[]).toSet().toList();
+    return filteredCategories
+        .expand((cat) => cat.itens ?? <ItemCategoria>[])
+        .toSet()
+        .toList();
   }
 
   @computed
   List<ItemCategoria> get allItems {
-    return _catalogStore.categorias
+    return catalogStore.categorias
         .expand((cat) => cat.itens ?? [])
         .toSet()
         .toList() as List<ItemCategoria>;
@@ -54,16 +58,15 @@ abstract class FilteredCatalogStoreBase with Store {
   @action
   List<Categoria> filterCategories(String query) {
     if (query.isEmpty) {
-      return _catalogStore.categorias;
+      return catalogStore.categorias;
     }
-    final lowerQuery = query.toLowerCase();
-    return _catalogStore.categorias
+    final lowerQuery = query.toSearchTerm();
+    return catalogStore.categorias
         .where((cat) =>
-            (cat.nome?.toLowerCase().contains(lowerQuery) ?? false) ||
+            (cat.nome?.toSearchTerm().contains(lowerQuery) ?? false) ||
             (cat.itens?.any(
-                    (item) => item.nome.toLowerCase().contains(lowerQuery)) ??
+                    (item) => item.nome.toSearchTerm().contains(lowerQuery)) ??
                 false))
         .toList();
   }
-
 }

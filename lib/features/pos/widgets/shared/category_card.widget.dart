@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:teste_flutter/utils/extension_methos/material_extensions_methods.dart';
 
 class CategoryCard extends StatefulWidget {
   final Widget? leading;
@@ -33,7 +32,6 @@ class _CategoryCardState extends State<CategoryCard> {
   @override
   Widget build(BuildContext context) {
     final double cardWidth = widget.mobile ? 132.0 : 152.0;
-    final double cardHeight = widget.mobile ? 48.0 : 62.0;
 
     final EdgeInsets cardPadding = widget.mobile
         ? const EdgeInsets.all(6.0)
@@ -74,7 +72,6 @@ class _CategoryCardState extends State<CategoryCard> {
       onExit: (_) => setState(() => _isHovered = false),
       child: Container(
         width: cardWidth,
-        height: cardHeight,
         decoration: BoxDecoration(
           color: widget.backgroundColor,
           image: widget.backgroundImage != null
@@ -101,6 +98,7 @@ class _CategoryCardState extends State<CategoryCard> {
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
