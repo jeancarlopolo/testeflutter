@@ -2,21 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:teste_flutter/features/pos/stores/filtered_catalog.store.dart';
-import 'package:teste_flutter/features/pos/widgets/desktop/category_list.widget.dart';
+import 'package:teste_flutter/features/pos/widgets/desktop/desktop_category_list.widget.dart';
+import 'package:teste_flutter/features/pos/widgets/shared/product_grid.widget.dart';
 import 'package:teste_flutter/shared/widgets/search_input.widget.dart';
 import 'package:teste_flutter/utils/extension_methos/extension_methods.dart';
 import 'package:teste_flutter/utils/extension_methos/material_extensions_methods.dart';
 
-class CatalogPage extends StatefulWidget {
-  const CatalogPage({super.key, required this.storeName});
+class DesktopCatalogPage extends StatefulWidget {
+  const DesktopCatalogPage({super.key, required this.storeName});
 
   final String storeName;
 
   @override
-  State<CatalogPage> createState() => _CatalogPageState();
+  State<DesktopCatalogPage> createState() => _DesktopCatalogPageState();
 }
 
-class _CatalogPageState extends State<CatalogPage> {
+class _DesktopCatalogPageState extends State<DesktopCatalogPage> {
   @override
   void initState() {
     super.initState();
@@ -73,15 +74,12 @@ class _CatalogPageState extends State<CatalogPage> {
               ),
 
               const SizedBox(width: 10),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: SearchInput(
-                  onChanged: (value) {
-                    filteredCatalogStore.searchQuery = value ?? '';
-                  },
-                  placeholder: 'Buscar',
-                  width: 200,
-                ),
+              SearchInput(
+                onChanged: (value) {
+                  filteredCatalogStore.searchQuery = value ?? '';
+                },
+                placeholder: 'Buscar',
+                width: 200,
               ),
               const SizedBox(width: 10),
               SizedBox(
@@ -114,9 +112,13 @@ class _CatalogPageState extends State<CatalogPage> {
             ],
           ),
         ),
-        body: const CategoryList(),
+        body: ListView(
+          children: [
+            const CategoryList(),
+            ProductGrid(items: filteredCatalogStore.currentItems),
+          ],
+        ),
       );
     });
   }
 }
-

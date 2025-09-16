@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:teste_flutter/features/catalog/entities/cashback.entity.dart';
 import 'package:teste_flutter/features/catalog/entities/dia_semana_cashback.entity.dart';
 import 'package:teste_flutter/features/catalog/entities/item_categoria.entity.dart';
+import 'package:teste_flutter/features/catalog/enums/preco_prefix.enum.dart';
 import 'package:teste_flutter/features/catalog/enums/status.enum.dart';
 import 'package:teste_flutter/utils/extension_methos/extension_methods.dart';
 import 'package:teste_flutter/utils/extension_methos/material_extensions_methods.dart';
@@ -68,7 +69,7 @@ class ItemCard extends StatelessWidget {
       opacity: enabled ? 1.0 : 0.5,
       child: Container(
         width: 132,
-        height: 186,
+        height: 190,
         padding: const EdgeInsets.all(6),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -105,8 +106,7 @@ class ItemCard extends StatelessWidget {
                   width: 120,
                   height: 110,
                   color: Colors.grey[200],
-                  child: Icon(Icons.shopping_bag_outlined,
-                      color: Colors.grey[400]),
+                  child: Icon(Icons.fastfood, color: Colors.grey[400]),
                 );
               },
             ),
@@ -116,6 +116,8 @@ class ItemCard extends StatelessWidget {
               _buildTag('ESGOTADO', Colors.black.withOpacity(0.6)),
             StatusEnum.indisponivel =>
               _buildTag('INDISPONÍVEL', Colors.black.withOpacity(0.6)),
+            StatusEnum.pausado =>
+              _buildTag('PAUSADO', Colors.black.withOpacity(0.6)),
             StatusEnum.novidade => _buildTag('NOVIDADE', Colors.green),
             _ => const SizedBox.shrink(),
           },
@@ -123,7 +125,7 @@ class ItemCard extends StatelessWidget {
               item.precoPromocional < item.preco &&
               item.precoPromocional > 0)
             _buildDiscountTag(),
-          
+
           // START OF CHANGES: Group icons in a Positioned Row
           Positioned(
             top: 6,
@@ -131,20 +133,17 @@ class ItemCard extends StatelessWidget {
             child: Row(
               children: [
                 // Show cashback icon if active
-                if (_hasActiveCashback)
-                  const CashBackIcon(),
-                
+                if (_hasActiveCashback) const CashBackIcon(),
+
                 // Show a spacer ONLY if both icons are visible
                 if (_hasActiveCashback && item.statusPromocao)
                   const SizedBox(width: 5),
 
                 // Show gift icon if it's a promotion
-                if (item.statusPromocao)
-                  const GiftIcon(),
+                if (item.statusPromocao) const GiftIcon(),
               ],
             ),
           ),
-          // END OF CHANGES
 
           // /* Open product */ - The add button
           _buildAddButton(),
@@ -156,7 +155,7 @@ class ItemCard extends StatelessWidget {
   Widget _buildAddButton() {
     return Positioned(
       right: 4,
-      bottom: 5,
+      bottom: item.status == StatusEnum.disponivel ? 4 : 24,
       child: Container(
         width: 30,
         height: 30,
@@ -239,9 +238,8 @@ class ContentSection extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // /* Name */ & /* Categorie */
           Text(
-            item.nome, // Use nome from the model
+            item.nome,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(
@@ -251,34 +249,36 @@ class ContentSection extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          const Spacer(), // Pushes the price to the bottom
-          // /* Price */ - This part is conditional
+          const Spacer(),
+          if (item.precoPrefix == PrecoPrefixEnum.a_partir)
+            Text(
+              'a partir de',
+              style: context.textTheme.bodySmall?.copyWith(
+                fontSize: 12
+              ),
+            ),
           if (item.statusPromocao && item.precoPromocional > 0)
-            Column(
+            Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   item.preco.format(), // Old price
-                  style: const TextStyle(
-                    fontFamily: 'Roboto',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.black,
+                  style: context.textTheme.labelLarge?.copyWith(
                     decoration: TextDecoration.lineThrough,
+                    color: Colors.black.withOpacity(0.5),
                   ),
                 ),
+                const SizedBox(width: 4),
                 Text(
                   item.precoPromocional.format(),
                   style: context.textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.bold,
                     color: Colors.green,
                   ),
                 ),
               ],
             )
-
-          // REGULAR PRICE VIEW
           else
             Text(
               item.preco.format(), // Regular price

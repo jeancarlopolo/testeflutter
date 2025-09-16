@@ -14,8 +14,6 @@ abstract class FilteredCatalogStoreBase with Store {
   @observable
   CatalogStore catalogStore;
 
-
-
   @observable
   String searchQuery = '';
 
@@ -25,7 +23,7 @@ abstract class FilteredCatalogStoreBase with Store {
   @computed
   List<ItemCategoria> get currentItems {
     if (selectedCategory != null) {
-      return selectedCategory?.itens ?? [];
+      return selectedCategory?.itens ?? <ItemCategoria>[];
     } else if (searchQuery.isNotEmpty) {
       return filteredItems;
     } else {
@@ -35,7 +33,7 @@ abstract class FilteredCatalogStoreBase with Store {
 
   @computed
   List<Categoria> get filteredCategories {
-    if (catalogStore.categorias.isEmpty) return [];
+    if (catalogStore.categorias.isEmpty) return <Categoria>[];
     return filterCategories(searchQuery);
   }
 
@@ -50,9 +48,9 @@ abstract class FilteredCatalogStoreBase with Store {
   @computed
   List<ItemCategoria> get allItems {
     return catalogStore.categorias
-        .expand((cat) => cat.itens ?? [])
+        .expand((cat) => cat.itens ?? <ItemCategoria>[])
         .toSet()
-        .toList() as List<ItemCategoria>;
+        .toList();
   }
 
   @action

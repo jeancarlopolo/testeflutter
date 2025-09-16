@@ -4,40 +4,29 @@ import 'package:get_it/get_it.dart';
 import 'package:teste_flutter/utils/extension_methos/material_extensions_methods.dart';
 import 'package:teste_flutter/features/pos/stores/expand.store.dart';
 
-class MoreCard extends StatefulWidget {
+class MoreCard extends StatelessWidget {
   final VoidCallback? onPressed; 
+  final ExpandStore store;
   
   const MoreCard({
     super.key,
     this.onPressed,
+    required this.store,
   });
-
-  @override
-  State<MoreCard> createState() => _MoreCardState();
-}
-
-class _MoreCardState extends State<MoreCard> {
-  late final ExpandStore expandStore;
-
-  @override
-  void initState() {
-    super.initState();
-    expandStore = GetIt.I<ExpandStore>();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Observer(
       builder: (context) {
-        final IconData iconData = expandStore.isExpanded ? Icons.remove : Icons.add;
-        final String label = expandStore.isExpanded ? 'menos' : 'mais';
-        final double height = expandStore.isExpanded ? 60.0 : 62.0;
+        final IconData iconData = store.isExpanded ? Icons.remove : Icons.add;
+        final String label = store.isExpanded ? 'menos' : 'mais';
+        final double height = store.isExpanded ? 60.0 : 62.0;
         final textStyle = context.textTheme.labelLarge;
         
         return GestureDetector(
           onTap: () {
-            expandStore.toggleExpand();
-            widget.onPressed?.call();
+            store.toggleExpand();
+            onPressed?.call();
           },
           child: SizedBox(
             width: 152,
