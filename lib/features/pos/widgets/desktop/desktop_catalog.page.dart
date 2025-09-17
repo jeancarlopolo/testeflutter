@@ -38,21 +38,14 @@ class _DesktopCatalogPageState extends State<DesktopCatalogPage> {
           elevation: 1,
           title: Row(
             children: [
-              // Back button
-              IconButton(
-                icon: Icon(
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Icon(
                   Icons.arrow_back,
                   color: onSurfaceVariant,
                 ),
-                padding: const EdgeInsets.all(8),
-                constraints: const BoxConstraints(),
-                style: ButtonStyle(
-                    side: WidgetStateProperty.all(
-                        const BorderSide(color: Colors.transparent))),
-                onPressed: () {},
               ),
               const SizedBox(width: 4),
-
               Flexible(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -72,7 +65,6 @@ class _DesktopCatalogPageState extends State<DesktopCatalogPage> {
                   ],
                 ),
               ),
-
               const SizedBox(width: 10),
               SearchInput(
                 onChanged: (value) {
@@ -114,7 +106,7 @@ class _DesktopCatalogPageState extends State<DesktopCatalogPage> {
         ),
         body: ListView(
           children: [
-            const CategoryList(),
+            const DesktopCategoryList(),
             ProductGrid(items: filteredCatalogStore.currentItems),
           ],
         ),

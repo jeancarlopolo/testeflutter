@@ -6,9 +6,11 @@ class ProductGrid extends StatelessWidget {
   const ProductGrid({
     super.key,
     required this.items,
+    this.expand = false,
   });
 
   final List<ItemCategoria> items;
+  final bool expand;
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +27,30 @@ class ProductGrid extends StatelessWidget {
       );
     }
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Wrap(
-        spacing: 16.0, 
-        runSpacing: 16.0, 
-        children: items.map((item) => ItemCard(item: item)).toList(),
-      ),
-    );
+    if (expand) {
+      return GridView.builder(
+        padding: const EdgeInsets.all(16.0),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16.0,
+          mainAxisSpacing: 16.0,
+          childAspectRatio: 0.8,
+        ),
+        itemCount: items.length,
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return ItemCard(item: item);
+        },
+      );
+    } else {
+      return SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Wrap(
+          spacing: 16.0,
+          runSpacing: 16.0,
+          children: items.map((item) => ItemCard(item: item)).toList(),
+        ),
+      );
+    }
   }
 }

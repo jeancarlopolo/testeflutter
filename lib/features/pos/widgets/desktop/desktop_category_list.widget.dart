@@ -9,16 +9,16 @@ import 'package:teste_flutter/features/pos/widgets/shared/category_card.widget.d
 import 'package:teste_flutter/features/pos/widgets/shared/more_card.widget.dart';
 import 'package:teste_flutter/features/pos/widgets/shared/product_grid.widget.dart';
 
-class CategoryList extends StatefulWidget {
-  const CategoryList({
+class DesktopCategoryList extends StatefulWidget {
+  const DesktopCategoryList({
     super.key,
   });
 
   @override
-  State<CategoryList> createState() => _CategoryListState();
+  State<DesktopCategoryList> createState() => _DesktopCategoryListState();
 }
 
-class _CategoryListState extends State<CategoryList> {
+class _DesktopCategoryListState extends State<DesktopCategoryList> {
   @override
   void initState() {
     super.initState();
